@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/empty.proto";
+
+option go_package = ".;pb";
+
+message PasswordGrantRequest {
+  string ClientId = 1;
+  string ClientSecret = 2;
+  string Username = 3;
+  string Password = 4;
+  string Scopes = 5;
+}
+
+message AccessTokenData {
+  string AccessToken = 1;
+  string RefreshToken = 2;
+  int64 ExpireAt = 3;
+}
+
+message AccessTokenResponse {
+  int32 Code = 1;
+  string Message = 2;
+  string ErrorMessage = 3;
+  AccessTokenData Data = 4;
+}
+
+message ValidateTokenRequest {
+  string AccessToken = 1;
+}
+
+message RefreshTokenRequest {
+  string AccessToken = 1;
+  string RefreshToken = 2;
+}
+
+service AccessTokenService {
+  rpc PasswordGrant(PasswordGrantRequest) returns (AccessTokenResponse);
+  rpc ValidateAccessToken(ValidateTokenRequest) returns (google.protobuf.Empty);
+  rpc RefreshAccessToken(RefreshTokenRequest) returns (AccessTokenResponse);
+}

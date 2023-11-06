@@ -1,0 +1,89 @@
+codes:
+  - code: 500
+    error: internal server error
+    message: there is an internal issue, we will fix it as soon as possible
+    response_code: 13
+  - code: 501
+    error: database error
+    message: there is an issue when trying to access database, we will fix it as soon as possible
+    response_code: 13
+  - code: 502
+    error: error when trying to decode object
+    message: there is an internal issue, we will fix it as soon as possible
+    response_code: 13
+  - code: 503
+    error: error when trying to generate something
+    message: there is an internal issue, we will fix it as soon as possible
+    response_code: 13
+  - code: 504
+    error: error when trying to start database session
+    message: there is an internal issue, we will fix it as soon as possible
+    response_code: 13
+
+  - code: 400
+    error: bad request
+    message: bad request
+    response_code: 3
+  - code: 401
+    error: empty value
+    message: there is an empty value, please give the valid value
+    response_code: 3
+  - code: 402
+    error: password is invalid
+    message: password is invalid
+    response_code: 3
+  - code: 403
+    error: data not found
+    message: data not found
+    response_code: 5
+
+  - code: 410
+    error: data is already exist
+    message: user is already exist
+    response_code: 6
+
+  - code: 420
+    error: oauth client not found in database
+    message: oauth client not registered
+    response_code: 16
+  - code: 421
+    error: oauth client id or password is wrong
+    message: oauth client is invalid
+    response_code: 16
+  - code: 422
+    error: metadata oauth client is missing
+    message: metadata oauth client is missing
+    response_code: 16
+  - code: 423
+    error: access token is expired
+    message: access token is expired
+    response_code: 16
+  - code: 424
+    error: access token is expired
+    message: access token is expired
+    response_code: 16
+  - code: 425
+    error: access token not found
+    message: access token not found
+    response_code: 16
+  - code: 426
+    error: invalid access token
+    message: invalid access token
+    response_code: 16
+  - code: 427
+    error: access token is active
+    message: access token is active
+    response_code: 16
+  - code: 428
+    error: refresh token exceed the limit
+    message: refresh token exceed the limit, please re-login
+    response_code: 16
+
+  - code: 200
+    error:
+    message: called successfully
+    response_code: 0
+  - code: 201
+    error:
+    message: created successfully
+    response_code: 0

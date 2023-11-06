@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = ".;pb";
+
+message RegistrationUserRequest {
+  string Username = 1;
+  string Password = 2;
+  string Email = 3;
+  string Phone = 4;
+}
+
+message RegistrationUserData {
+  string AccessToken = 1;
+  string RefreshToken = 2;
+  int64 ExpiredAt = 3;
+  string Id = 4;
+}
+
+message RegistrationUserResponse {
+  int32 Code = 1;
+  string Message = 2;
+  string ErrorMessage = 3;
+  RegistrationUserData Data = 4;
+}
+
+service RegistrationService {
+  rpc RegisterUser(RegistrationUserRequest) returns (RegistrationUserResponse);
+}

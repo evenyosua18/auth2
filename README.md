@@ -4,9 +4,10 @@ Oauth2 as a microservice.
 For project structure, based on this [repository](https://github.com/evenyosua18/template-project-structure)
 
 ### Tech Stack
+- Go Version 1.20
 - Sentry
 - Grpc
-- MongoDB
+- MongoDB 6
 - [Wire](https://github.com/google/wire)
 
 ### On Progress

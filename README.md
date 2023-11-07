@@ -1,6 +1,7 @@
 # Oauth2 Implementation
 Oauth2 as a microservice.
-For project structure explanation based on this [repository](https://github.com/evenyosua18/template-project-structure)
+
+For project structure, based on this [repository](https://github.com/evenyosua18/template-project-structure)
 
 ### Tech Stack
 - Sentry
@@ -9,9 +10,9 @@ For project structure explanation based on this [repository](https://github.com/
 - [Wire](https://github.com/google/wire)
 
 ### On Progress
-- Unit Testing
-- Docker
-- Api Gateway
+- [] Unit Testing
+- [] Docker
+- [] Api Gateway
 
 ### Feature
 - User Registration

@@ -10,9 +10,9 @@ For project structure, based on this [repository](https://github.com/evenyosua18
 - [Wire](https://github.com/google/wire)
 
 ### On Progress
-- [] Unit Testing
-- [] Docker
-- [] Api Gateway
+- [ ] Unit Testing
+- [ ] Docker
+- [ ] Api Gateway
 
 ### Feature
 - User Registration

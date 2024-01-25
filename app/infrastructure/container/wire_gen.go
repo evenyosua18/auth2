@@ -41,10 +41,9 @@ func InitializeOauthClientUsecase(connection *db.MongoConnection) oauthclient2.I
 // Injectors from registration_usecase.go:
 
 func InitializeRegistrationUsecase(connection *db.MongoConnection) registration.IRegistrationUsecase {
-	iRegistrationBuilder := builder.NewRegistrationBuilder()
 	iUserRepository := user.NewUserRepository(connection)
 	iAccessTokenRepository := accesstoken2.NewAccessTokenRepository(connection)
 	iRefreshTokenRepository := refreshtoken.NewRefreshTokenRepository(connection)
-	iRegistrationUsecase := registration.NewRegistrationUsecase(iRegistrationBuilder, iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
+	iRegistrationUsecase := registration.NewRegistrationUsecase(iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
 	return iRegistrationUsecase
 }

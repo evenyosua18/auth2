@@ -12,7 +12,7 @@ import (
 
 // Apply register all service here
 func Apply(server *grpc.Server) {
-	pb.RegisterAccessTokenServiceServer(server, accesstoken.NewAccessTokenService(container.InitializeAccessTokenUsecase(repository.Con.MainMongoDB)))
+	pb.RegisterAccessTokenServiceServer(server, accesstoken.NewAccessTokenService(builder.NewAccessTokenBuilder(), container.InitializeAccessTokenUsecase(repository.Con.MainMongoDB)))
 	pb.RegisterRegistrationServiceServer(server, registration.NewRegistrationService(builder.NewRegistrationBuilder(), container.InitializeRegistrationUsecase(repository.Con.MainMongoDB)))
 	//pb.RegisterUserServiceServer(server, user.NewUserService(container.InitializeUserInteraction()))
 }

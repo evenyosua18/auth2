@@ -20,5 +20,5 @@ func (s *ServiceAccessToken) PasswordGrant(ctx context.Context, in *pb.PasswordG
 	}
 
 	tracing.LogResponse(sp, res)
-	return res.(*pb.AccessTokenResponse), nil
+	return s.out.AccessTokenResponse(tracing.Context(sp), res, 200)
 }

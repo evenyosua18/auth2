@@ -120,7 +120,7 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
 	}
 
-	return u.out.AccessTokenResponse(tracing.Context(sp), struct {
+	return struct {
 		AccessToken  string
 		RefreshToken string
 		ExpireAt     int64
@@ -128,7 +128,7 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 		AccessToken:  tokenStr,
 		RefreshToken: newRefreshToken.RefreshToken,
 		ExpireAt:     expiredAt.Unix(),
-	}, 200)
+	}, nil
 }
 
 func (u *UsecaseAccessToken) generateNewRefreshToken(sp interface{}, prevRefreshToken model.RefreshTokenModel) (refreshToken *model.RefreshTokenModel, err error) {

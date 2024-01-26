@@ -110,12 +110,14 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 	}
 
 	// update access token
-	if _, err := u.accessToken.UpdateAccessToken(tracing.Context(sp), bson.M{
-		"_id":        refreshToken.AccessTokenId,
-		"deleted_at": nil,
-	}, bson.M{
-		"expired_at": expiredAt,
-		"updated_at": time.Now(),
+	if _, err := u.accessToken.UpdateAccessToken(tracing.Context(sp), struct {
+		Id *primitive.ObjectID
+	}{
+		Id: &refreshToken.AccessTokenId,
+	}, struct {
+		ExpiredAt time.Time
+	}{
+		ExpiredAt: expiredAt,
 	}); err != nil {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
 	}

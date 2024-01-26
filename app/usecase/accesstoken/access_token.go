@@ -43,10 +43,8 @@ func NewAccessTokenUsecase(oauthClientRepo oauthclient.IOauthClientRepository, u
 func (u *UsecaseAccessToken) manageAccessToken(sp interface{}, user *model.UserModel, count int) (interface{}, error) {
 	// create token model
 	savedToken := model.AccessTokenModel{
-		Id:        primitive.NewObjectID(),
-		UserId:    user.Id,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		Id:     primitive.NewObjectID(),
+		UserId: user.Id,
 	}
 
 	// generate access token

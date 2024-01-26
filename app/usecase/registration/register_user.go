@@ -2,6 +2,7 @@ package registration
 
 import (
 	"context"
+	"errors"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/auth2/app/repository"
@@ -51,7 +52,7 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 			bson.M{"phone": req.Phone},
 		},
 		"deleted_at": nil,
-	}); err != nil && err != mongo.ErrNoDocuments {
+	}); err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 500))
 	} else if user != nil {
 		return nil, tracing.LogError(sp, codes.Wrap(nil, 410))
@@ -79,10 +80,8 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 
 	// create token model
 	savedToken := model.AccessTokenModel{
-		Id:        primitive.NewObjectID(),
-		UserId:    user.Id,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		Id:     primitive.NewObjectID(),
+		UserId: user.Id,
 	}
 
 	// generate access token

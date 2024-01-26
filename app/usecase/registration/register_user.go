@@ -144,10 +144,10 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 	}
 
 	tracing.LogResponse(sp, savedToken)
-	return u.out.RegistrationUserResponse(tracing.Context(sp), UserRegistrationResponse{
+	return UserRegistrationResponse{
 		Id:           savedToken.Id.Hex(),
 		RefreshToken: refreshToken.RefreshToken,
 		AccessToken:  tokenStr,
 		ExpiredAt:    expiredAt.Unix(),
-	}, 201)
+	}, nil
 }

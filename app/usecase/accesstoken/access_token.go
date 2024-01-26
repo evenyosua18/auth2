@@ -21,21 +21,15 @@ type IAccessTokenUsecase interface {
 	RefreshAccessToken(ctx context.Context, in interface{}) (interface{}, error)
 }
 
-type IAccessTokenBuilder interface {
-	AccessTokenResponse(ctx context.Context, in interface{}, code int) (interface{}, error)
-}
-
 type UsecaseAccessToken struct {
 	oauthClient  oauthclient.IOauthClientRepository
 	user         user.IUserRepository
 	accessToken  accesstoken.IAccessTokenRepository
 	refreshToken refreshtoken.IRefreshTokenRepository
-	out          IAccessTokenBuilder
 }
 
-func NewAccessTokenUsecase(out IAccessTokenBuilder, oauthClientRepo oauthclient.IOauthClientRepository, userRepo user.IUserRepository, accessTokenRepo accesstoken.IAccessTokenRepository, refreshTokenRepo refreshtoken.IRefreshTokenRepository) IAccessTokenUsecase {
+func NewAccessTokenUsecase(oauthClientRepo oauthclient.IOauthClientRepository, userRepo user.IUserRepository, accessTokenRepo accesstoken.IAccessTokenRepository, refreshTokenRepo refreshtoken.IRefreshTokenRepository) IAccessTokenUsecase {
 	return &UsecaseAccessToken{
-		out:          out,
 		oauthClient:  oauthClientRepo,
 		user:         userRepo,
 		accessToken:  accessTokenRepo,

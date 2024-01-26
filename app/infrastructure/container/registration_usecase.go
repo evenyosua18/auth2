@@ -4,7 +4,6 @@
 package container
 
 import (
-	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/builder"
 	"github.com/evenyosua18/auth2/app/repository/authdb/accesstoken"
 	"github.com/evenyosua18/auth2/app/repository/authdb/refreshtoken"
 	"github.com/evenyosua18/auth2/app/repository/authdb/user"
@@ -14,6 +13,6 @@ import (
 )
 
 func InitializeRegistrationUsecase(connection *db.MongoConnection) (registration register.IRegistrationUsecase) {
-	wire.Build(builder.NewRegistrationBuilder, user.NewUserRepository, accesstoken.NewAccessTokenRepository, refreshtoken.NewRefreshTokenRepository, register.NewRegistrationUsecase)
+	wire.Build(user.NewUserRepository, accesstoken.NewAccessTokenRepository, refreshtoken.NewRefreshTokenRepository, register.NewRegistrationUsecase)
 	return
 }

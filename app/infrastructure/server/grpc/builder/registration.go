@@ -3,7 +3,7 @@ package builder
 import (
 	"context"
 	"github.com/evenyosua18/auth2/app/infrastructure/proto/pb"
-	"github.com/evenyosua18/auth2/app/usecase/registration"
+	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/service/registration"
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
@@ -15,7 +15,7 @@ func NewRegistrationBuilder() registration.IRegistrationBuilder {
 	return &RegistrationBuilder{}
 }
 
-func (r *RegistrationBuilder) RegistrationUserResponse(ctx context.Context, in interface{}, code int) (interface{}, error) {
+func (r *RegistrationBuilder) RegistrationUserResponse(ctx context.Context, in interface{}, code int) (*pb.RegistrationUserResponse, error) {
 	// tracing
 	sp := tracing.StartChild(ctx, in)
 	defer tracing.Close(sp)

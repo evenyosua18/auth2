@@ -20,5 +20,5 @@ func (s *ServiceAccessToken) RefreshAccessToken(ctx context.Context, in *pb.Refr
 	}
 
 	tracing.LogResponse(sp, res)
-	return res.(*pb.AccessTokenResponse), nil
+	return s.out.AccessTokenResponse(tracing.Context(sp), res, 200)
 }

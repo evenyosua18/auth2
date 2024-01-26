@@ -3,7 +3,7 @@ package builder
 import (
 	"context"
 	"github.com/evenyosua18/auth2/app/infrastructure/proto/pb"
-	"github.com/evenyosua18/auth2/app/usecase/accesstoken"
+	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/service/accesstoken"
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
@@ -15,7 +15,7 @@ func NewAccessTokenBuilder() accesstoken.IAccessTokenBuilder {
 	return &AccessTokenBuilder{}
 }
 
-func (b *AccessTokenBuilder) AccessTokenResponse(ctx context.Context, in interface{}, code int) (interface{}, error) {
+func (b *AccessTokenBuilder) AccessTokenResponse(ctx context.Context, in interface{}, code int) (*pb.AccessTokenResponse, error) {
 	// tracing
 	sp := tracing.StartChild(ctx, in)
 	defer tracing.Close(sp)

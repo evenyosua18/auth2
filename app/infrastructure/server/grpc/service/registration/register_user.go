@@ -21,5 +21,5 @@ func (s *ServiceRegistration) RegisterUser(ctx context.Context, in *pb.Registrat
 	}
 
 	tracing.LogResponse(sp, res)
-	return res.(*pb.RegistrationUserResponse), nil
+	return s.out.RegistrationUserResponse(tracing.Context(sp), res, 201)
 }

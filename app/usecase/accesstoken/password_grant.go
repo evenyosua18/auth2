@@ -101,5 +101,5 @@ func (u *UsecaseAccessToken) PasswordGrant(ctx context.Context, in interface{}) 
 	}
 
 	tracing.LogResponse(sp, res)
-	return u.out.AccessTokenResponse(tracing.Context(sp), res, 200)
+	return res, nil
 }

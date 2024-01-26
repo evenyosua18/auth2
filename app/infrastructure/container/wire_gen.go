@@ -7,7 +7,6 @@
 package container
 
 import (
-	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/builder"
 	accesstoken2 "github.com/evenyosua18/auth2/app/repository/authdb/accesstoken"
 	"github.com/evenyosua18/auth2/app/repository/authdb/oauthclient"
 	"github.com/evenyosua18/auth2/app/repository/authdb/refreshtoken"
@@ -21,12 +20,11 @@ import (
 // Injectors from access_token_usecase.go:
 
 func InitializeAccessTokenUsecase(connection *db.MongoConnection) accesstoken.IAccessTokenUsecase {
-	iAccessTokenBuilder := builder.NewAccessTokenBuilder()
 	iOauthClientRepository := oauthclient.NewOauthClientRepository(connection)
 	iUserRepository := user.NewUserRepository(connection)
 	iAccessTokenRepository := accesstoken2.NewAccessTokenRepository(connection)
 	iRefreshTokenRepository := refreshtoken.NewRefreshTokenRepository(connection)
-	iAccessTokenUsecase := accesstoken.NewAccessTokenUsecase(iAccessTokenBuilder, iOauthClientRepository, iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
+	iAccessTokenUsecase := accesstoken.NewAccessTokenUsecase(iOauthClientRepository, iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
 	return iAccessTokenUsecase
 }
 
@@ -41,10 +39,9 @@ func InitializeOauthClientUsecase(connection *db.MongoConnection) oauthclient2.I
 // Injectors from registration_usecase.go:
 
 func InitializeRegistrationUsecase(connection *db.MongoConnection) registration.IRegistrationUsecase {
-	iRegistrationBuilder := builder.NewRegistrationBuilder()
 	iUserRepository := user.NewUserRepository(connection)
 	iAccessTokenRepository := accesstoken2.NewAccessTokenRepository(connection)
 	iRefreshTokenRepository := refreshtoken.NewRefreshTokenRepository(connection)
-	iRegistrationUsecase := registration.NewRegistrationUsecase(iRegistrationBuilder, iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
+	iRegistrationUsecase := registration.NewRegistrationUsecase(iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
 	return iRegistrationUsecase
 }

@@ -2,11 +2,11 @@ package oauthclient
 
 import (
 	"context"
+	"errors"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -28,12 +28,13 @@ func (u *UsecaseOauthClient) ValidateOauthClient(ctx context.Context, in interfa
 	}
 
 	// get oauth client
-	oauthClientRes, err := u.oauthClient.GetOauthClient(tracing.Context(sp), bson.M{
-		"client_id":  req.ClientId,
-		"deleted_at": nil,
+	oauthClientRes, err := u.oauthClient.GetOauthClient(tracing.Context(sp), struct {
+		ClientId string
+	}{
+		ClientId: req.ClientId,
 	})
 
-	if err == mongo.ErrNoDocuments || oauthClientRes == nil {
+	if errors.Is(err, mongo.ErrNoDocuments) || oauthClientRes == nil {
 		return tracing.LogError(sp, codes.Wrap(err, 420))
 	} else if err != nil {
 		return tracing.LogError(sp, codes.Wrap(err, 500))

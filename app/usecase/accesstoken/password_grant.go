@@ -2,11 +2,11 @@ package accesstoken
 
 import (
 	"context"
+	"errors"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -32,12 +32,13 @@ func (u *UsecaseAccessToken) PasswordGrant(ctx context.Context, in interface{}) 
 	tracing.LogObject(sp, "request after decode", req)
 
 	//get user
-	userRes, err := u.user.GetUser(tracing.Context(sp), bson.M{
-		"username":   req.Username,
-		"deleted_at": nil,
+	userRes, err := u.user.GetUser(tracing.Context(sp), struct {
+		Username string
+	}{
+		Username: req.Username,
 	})
 
-	if err == mongo.ErrNoDocuments {
+	if errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 403))
 	} else if err != nil {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 501))

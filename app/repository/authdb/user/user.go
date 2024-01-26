@@ -3,12 +3,11 @@ package user
 import (
 	"context"
 	"github.com/evenyosua18/auth2/app/utils/db"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type IUserRepository interface {
-	GetUser(ctx context.Context, filter bson.M) (interface{}, error)
+	GetUser(ctx context.Context, filter interface{}) (interface{}, error)
 	InsertUser(ctx context.Context, in interface{}) error
 }
 

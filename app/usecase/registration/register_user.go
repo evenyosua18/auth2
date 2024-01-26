@@ -11,7 +11,6 @@ import (
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
@@ -45,13 +44,16 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 	}
 
 	// check username, email, phone exist
-	if user, err := u.user.GetUser(tracing.Context(sp), bson.M{
-		"$or": bson.A{
-			bson.M{"username": req.Username},
-			bson.M{"email": req.Email},
-			bson.M{"phone": req.Phone},
-		},
-		"deleted_at": nil,
+	if user, err := u.user.GetUser(tracing.Context(sp), struct {
+		Username   string
+		Email      string
+		Phone      string
+		CheckExist bool
+	}{
+		Username:   req.Username,
+		Email:      req.Email,
+		Phone:      req.Phone,
+		CheckExist: true,
 	}); err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 500))
 	} else if user != nil {
@@ -67,15 +69,12 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 
 	// create user model
 	user := model.UserModel{
-		Id:        primitive.NewObjectID(),
-		Email:     req.Email,
-		Phone:     req.Phone,
-		Username:  req.Username,
-		Password:  string(userPassword),
-		IsActive:  true,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		DeletedAt: nil,
+		Id:       primitive.NewObjectID(),
+		Email:    req.Email,
+		Phone:    req.Phone,
+		Username: req.Username,
+		Password: string(userPassword),
+		IsActive: true,
 	}
 
 	// create token model

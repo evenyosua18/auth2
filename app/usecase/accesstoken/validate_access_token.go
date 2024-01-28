@@ -2,13 +2,13 @@ package accesstoken
 
 import (
 	"context"
+	"errors"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/auth2/app/utils/token"
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
@@ -49,12 +49,13 @@ func (u *UsecaseAccessToken) ValidateAccessToken(ctx context.Context, in interfa
 	}
 
 	// get access token from db
-	accessTokenRes, err := u.accessToken.GetAccessToken(tracing.Context(sp), bson.M{
-		"deleted_at": nil,
-		"_id":        accessTokenObjectId,
+	accessTokenRes, err := u.accessToken.GetAccessToken(tracing.Context(sp), struct {
+		Id *primitive.ObjectID
+	}{
+		Id: &accessTokenObjectId,
 	})
 
-	if err != nil && err == mongo.ErrNoDocuments {
+	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
 		return tracing.LogError(sp, codes.Wrap(err, 425))
 	} else if err != nil {
 		return tracing.LogError(sp, codes.Wrap(err, 501))

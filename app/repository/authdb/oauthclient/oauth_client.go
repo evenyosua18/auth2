@@ -3,12 +3,11 @@ package oauthclient
 import (
 	"context"
 	"github.com/evenyosua18/auth2/app/utils/db"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type IOauthClientRepository interface {
-	GetOauthClient(ctx context.Context, m bson.M) (interface{}, error)
+	GetOauthClient(ctx context.Context, filter interface{}) (interface{}, error)
 	InsertOauthClient(ctx context.Context, in interface{}) error
 }
 

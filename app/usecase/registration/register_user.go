@@ -2,6 +2,7 @@ package registration
 
 import (
 	"context"
+	"errors"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/auth2/app/repository"
@@ -10,12 +11,10 @@ import (
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"os"
-	"time"
 )
 
 type UserRegistrationRequest struct {
@@ -44,14 +43,17 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 	}
 
 	// check username, email, phone exist
-	if user, err := u.user.GetUser(tracing.Context(sp), bson.M{
-		"$or": bson.A{
-			bson.M{"username": req.Username},
-			bson.M{"email": req.Email},
-			bson.M{"phone": req.Phone},
-		},
-		"deleted_at": nil,
-	}); err != nil && err != mongo.ErrNoDocuments {
+	if user, err := u.user.GetUser(tracing.Context(sp), struct {
+		Username   string
+		Email      string
+		Phone      string
+		CheckExist bool
+	}{
+		Username:   req.Username,
+		Email:      req.Email,
+		Phone:      req.Phone,
+		CheckExist: true,
+	}); err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 500))
 	} else if user != nil {
 		return nil, tracing.LogError(sp, codes.Wrap(nil, 410))
@@ -66,23 +68,18 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 
 	// create user model
 	user := model.UserModel{
-		Id:        primitive.NewObjectID(),
-		Email:     req.Email,
-		Phone:     req.Phone,
-		Username:  req.Username,
-		Password:  string(userPassword),
-		IsActive:  true,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		DeletedAt: nil,
+		Id:       primitive.NewObjectID(),
+		Email:    req.Email,
+		Phone:    req.Phone,
+		Username: req.Username,
+		Password: string(userPassword),
+		IsActive: true,
 	}
 
 	// create token model
 	savedToken := model.AccessTokenModel{
-		Id:        primitive.NewObjectID(),
-		UserId:    user.Id,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		Id:     primitive.NewObjectID(),
+		UserId: user.Id,
 	}
 
 	// generate access token
@@ -101,13 +98,10 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 
 	// create refresh token
 	refreshToken := model.RefreshTokenModel{
-		Id:            primitive.NewObjectID(),
 		AccessTokenId: savedToken.Id,
 		RefreshToken:  str.GenerateString(16, ""),
 		Count:         1,
 		UserId:        user.Id,
-		CreatedAt:     time.Now(),
-		UpdatedAt:     time.Now(),
 	}
 
 	// set ctx

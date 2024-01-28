@@ -3,15 +3,14 @@ package accesstoken
 import (
 	"context"
 	"github.com/evenyosua18/auth2/app/utils/db"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type IAccessTokenRepository interface {
 	InsertAccessToken(ctx context.Context, in interface{}) error
-	GetAccessToken(ctx context.Context, filter bson.M) (interface{}, error)
-	DeleteAccessToken(ctx context.Context, filter bson.M) error
-	UpdateAccessToken(ctx context.Context, filter, in bson.M) (interface{}, error)
+	GetAccessToken(ctx context.Context, filter interface{}) (interface{}, error)
+	DeleteAccessToken(ctx context.Context, filter interface{}) error
+	UpdateAccessToken(ctx context.Context, filter, in interface{}) (interface{}, error)
 }
 
 type RepositoryAccessToken struct {

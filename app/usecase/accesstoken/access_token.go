@@ -12,7 +12,6 @@ import (
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"time"
 )
 
 type IAccessTokenUsecase interface {
@@ -63,11 +62,8 @@ func (u *UsecaseAccessToken) manageAccessToken(sp interface{}, user *model.UserM
 
 	// create refresh token
 	refreshToken := model.RefreshTokenModel{
-		Id:            primitive.NewObjectID(),
 		AccessTokenId: savedToken.Id,
 		RefreshToken:  str.GenerateString(16, ""),
-		CreatedAt:     time.Now(),
-		UpdatedAt:     time.Now(),
 		Count:         count,
 		UserId:        user.Id,
 	}

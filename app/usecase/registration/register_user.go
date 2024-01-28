@@ -15,7 +15,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"os"
-	"time"
 )
 
 type UserRegistrationRequest struct {
@@ -99,13 +98,10 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 
 	// create refresh token
 	refreshToken := model.RefreshTokenModel{
-		Id:            primitive.NewObjectID(),
 		AccessTokenId: savedToken.Id,
 		RefreshToken:  str.GenerateString(16, ""),
 		Count:         1,
 		UserId:        user.Id,
-		CreatedAt:     time.Now(),
-		UpdatedAt:     time.Now(),
 	}
 
 	// set ctx

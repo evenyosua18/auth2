@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"github.com/patrickmn/go-cache"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -105,4 +106,12 @@ func (c *MongoConnection) EndSession(ctx context.Context, id string) {
 		ss.EndSession(ctx)
 	}
 	c.Session.Delete(id)
+}
+
+func SoftDelete() bson.M {
+	return bson.M{
+		"$set": bson.M{
+			"deleted_at": time.Now(),
+		},
+	}
 }

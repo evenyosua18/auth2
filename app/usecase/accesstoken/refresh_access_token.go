@@ -2,6 +2,7 @@ package accesstoken
 
 import (
 	"context"
+	"errors"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/auth2/app/utils/str"
@@ -9,7 +10,6 @@ import (
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"os"
@@ -45,27 +45,10 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 	}
 
 	// get refresh token & access token
-	refreshTokenRes, err := u.refreshToken.GetRefreshToken(ctx, []bson.M{
-		{
-			"$match": bson.M{
-				"deleted_at":    nil,
-				"refresh_token": req.RefreshToken,
-			},
-		},
-		{
-			"$lookup": bson.M{
-				"from":         "access_tokens",
-				"localField":   "access_token_id",
-				"foreignField": "_id",
-				"as":           "access_token",
-			},
-		},
-		{
-			"$unwind": bson.M{
-				"path":                       "$access_token",
-				"preserveNullAndEmptyArrays": true,
-			},
-		},
+	refreshTokenRes, err := u.refreshToken.GetRefreshToken(ctx, struct {
+		RefreshToken string
+	}{
+		RefreshToken: req.RefreshToken,
 	})
 
 	if err != nil {
@@ -136,11 +119,8 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 func (u *UsecaseAccessToken) generateNewRefreshToken(sp interface{}, prevRefreshToken model.RefreshTokenModel) (refreshToken *model.RefreshTokenModel, err error) {
 	// generate new refresh token
 	refreshToken = &model.RefreshTokenModel{
-		Id:            primitive.NewObjectID(),
 		AccessTokenId: prevRefreshToken.AccessTokenId,
 		RefreshToken:  str.GenerateString(16, ""),
-		CreatedAt:     time.Now(),
-		UpdatedAt:     time.Now(),
 		Count:         prevRefreshToken.Count + 1,
 		UserId:        prevRefreshToken.UserId,
 	}
@@ -151,10 +131,11 @@ func (u *UsecaseAccessToken) generateNewRefreshToken(sp interface{}, prevRefresh
 	}
 
 	// delete refresh token
-	if err = u.refreshToken.DeleteRefreshToken(tracing.Context(sp), bson.M{
-		"_id":        prevRefreshToken.Id,
-		"deleted_at": nil,
-	}); err != nil && err != mongo.ErrNoDocuments {
+	if err = u.refreshToken.DeleteRefreshToken(tracing.Context(sp), struct {
+		Id *primitive.ObjectID
+	}{
+		Id: &prevRefreshToken.Id,
+	}); err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
 		return nil, tracing.LogError(sp, codes.Wrap(nil, 502))
 	}
 

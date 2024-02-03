@@ -119,17 +119,17 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 
 	// save user
 	if err := u.user.InsertUser(childCtx, user); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
+		return nil, tracing.LogError(sp, err)
 	}
 
 	// save access token
 	if err := u.accessToken.InsertAccessToken(childCtx, savedToken); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
+		return nil, tracing.LogError(sp, err)
 	}
 
 	// save refresh token
 	if err := u.refreshToken.InsertRefreshToken(childCtx, refreshToken); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
+		return nil, tracing.LogError(sp, err)
 	}
 
 	// commit session

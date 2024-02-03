@@ -2,12 +2,10 @@ package oauthclient
 
 import (
 	"context"
-	"errors"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/ego-util/codes"
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
-	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -34,10 +32,10 @@ func (u *UsecaseOauthClient) ValidateOauthClient(ctx context.Context, in interfa
 		ClientId: req.ClientId,
 	})
 
-	if errors.Is(err, mongo.ErrNoDocuments) || oauthClientRes == nil {
+	if err != nil {
+		return tracing.LogError(sp, err)
+	} else if oauthClientRes == nil {
 		return tracing.LogError(sp, codes.Wrap(err, 420))
-	} else if err != nil {
-		return tracing.LogError(sp, codes.Wrap(err, 500))
 	}
 
 	oauthClient, ok := oauthClientRes.(*model.OauthClientModel)

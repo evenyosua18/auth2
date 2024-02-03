@@ -2,7 +2,6 @@ package accesstoken
 
 import (
 	"context"
-	"errors"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/auth2/app/utils/str"
@@ -11,7 +10,6 @@ import (
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"os"
 	"strconv"
 	"time"
@@ -102,7 +100,7 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 	}{
 		ExpiredAt: expiredAt,
 	}); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
+		return nil, tracing.LogError(sp, err)
 	}
 
 	return struct {
@@ -127,7 +125,7 @@ func (u *UsecaseAccessToken) generateNewRefreshToken(sp interface{}, prevRefresh
 
 	// saved new refresh token
 	if err = u.refreshToken.InsertRefreshToken(tracing.Context(sp), refreshToken); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 502))
+		return nil, tracing.LogError(sp, err)
 	}
 
 	// delete refresh token
@@ -135,8 +133,8 @@ func (u *UsecaseAccessToken) generateNewRefreshToken(sp interface{}, prevRefresh
 		Id *primitive.ObjectID
 	}{
 		Id: &prevRefreshToken.Id,
-	}); err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
-		return nil, tracing.LogError(sp, codes.Wrap(nil, 502))
+	}); err != nil {
+		return nil, tracing.LogError(sp, err)
 	}
 
 	return refreshToken, nil

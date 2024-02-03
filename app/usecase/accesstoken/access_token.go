@@ -70,12 +70,12 @@ func (u *UsecaseAccessToken) manageAccessToken(sp interface{}, user *model.UserM
 
 	// save access token
 	if err := u.accessToken.InsertAccessToken(tracing.Context(sp), savedToken); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 502))
+		return nil, err
 	}
 
 	// save refresh token
 	if err := u.refreshToken.InsertRefreshToken(tracing.Context(sp), refreshToken); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 502))
+		return nil, err
 	}
 
 	// setup response

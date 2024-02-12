@@ -2,7 +2,6 @@ package accesstoken
 
 import (
 	"context"
-	"errors"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/auth2/app/utils/token"
@@ -10,7 +9,6 @@ import (
 	"github.com/evenyosua18/ego-util/tracing"
 	"github.com/mitchellh/mapstructure"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
 
@@ -55,10 +53,8 @@ func (u *UsecaseAccessToken) ValidateAccessToken(ctx context.Context, in interfa
 		Id: &accessTokenObjectId,
 	})
 
-	if err != nil && errors.Is(err, mongo.ErrNoDocuments) {
-		return tracing.LogError(sp, codes.Wrap(err, 425))
-	} else if err != nil {
-		return tracing.LogError(sp, codes.Wrap(err, 501))
+	if err != nil {
+		return tracing.LogError(sp, err)
 	}
 
 	// convert to model

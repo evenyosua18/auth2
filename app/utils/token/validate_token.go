@@ -3,8 +3,8 @@ package token
 import (
 	"context"
 	"github.com/evenyosua18/auth2/app/constant"
-	"github.com/evenyosua18/ego-util/codes"
-	"github.com/evenyosua18/ego-util/tracing"
+	"github.com/evenyosua18/codes"
+	"github.com/evenyosua18/tracing"
 	"github.com/golang-jwt/jwt/v5"
 	"os"
 )

@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/evenyosua18/auth2/app/infrastructure/proto/pb"
 	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/service/registration"
-	"github.com/evenyosua18/ego-util/codes"
-	"github.com/evenyosua18/ego-util/tracing"
+	"github.com/evenyosua18/codes"
+	"github.com/evenyosua18/tracing"
 	"github.com/mitchellh/mapstructure"
 )
 

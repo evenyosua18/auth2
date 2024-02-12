@@ -1,6 +1,6 @@
 package response
 
-import "github.com/evenyosua18/ego-util/codes"
+import "github.com/evenyosua18/codes"
 
 type DefaultResponse struct {
 	Code         int         `json:"code"`

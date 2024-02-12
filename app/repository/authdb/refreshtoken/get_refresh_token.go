@@ -3,8 +3,8 @@ package refreshtoken
 import (
 	"context"
 	"github.com/evenyosua18/auth2/app/model"
-	"github.com/evenyosua18/ego-util/codes"
-	"github.com/evenyosua18/ego-util/tracing"
+	"github.com/evenyosua18/codes"
+	"github.com/evenyosua18/tracing"
 	"github.com/mitchellh/mapstructure"
 )
 

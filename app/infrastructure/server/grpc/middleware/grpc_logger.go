@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"context"
-	sentry_helper "github.com/evenyosua18/ego-util/tracing/sentry-helper"
+	"github.com/evenyosua18/sentry-helper"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

@@ -1,8 +1,8 @@
 package response
 
 import (
-	code "github.com/evenyosua18/ego-util/codes"
-	"github.com/evenyosua18/ego-util/tracing"
+	code "github.com/evenyosua18/codes"
+	"github.com/evenyosua18/tracing"
 	"google.golang.org/grpc/codes"
 )
 

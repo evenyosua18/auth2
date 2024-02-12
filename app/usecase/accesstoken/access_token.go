@@ -9,8 +9,8 @@ import (
 	"github.com/evenyosua18/auth2/app/repository/authdb/user"
 	"github.com/evenyosua18/auth2/app/utils/str"
 	"github.com/evenyosua18/auth2/app/utils/token"
-	"github.com/evenyosua18/ego-util/codes"
-	"github.com/evenyosua18/ego-util/tracing"
+	"github.com/evenyosua18/codes"
+	"github.com/evenyosua18/tracing"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

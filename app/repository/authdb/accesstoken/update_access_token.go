@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (r *RepositoryAccessToken) UpdateAccessToken(ctx context.Context, filter, in interface{}) (res interface{}, err error) {
+func (r *RepositoryAccessToken) UpdateAccessToken(ctx context.Context, filter, in interface{}) (err error) {
 	// tracing
 	sp := tracing.StartChild(ctx, in, filter)
 	defer tracing.Close(sp)
@@ -18,16 +18,17 @@ func (r *RepositoryAccessToken) UpdateAccessToken(ctx context.Context, filter, i
 	// filter
 	var f model.AccessTokenFilter
 	if err = mapstructure.Decode(filter, &f); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 502))
+		return tracing.LogError(sp, codes.Wrap(err, 502))
 	}
 
 	// model
 	var accessToken model.AccessTokenModel
 	if err = mapstructure.Decode(in, &accessToken); err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 502))
+		return tracing.LogError(sp, codes.Wrap(err, 502))
 	}
 
 	// db
+	var res interface{}
 	if ss := r.db.GetSession(ctx.Value(constant.SessionId)); ss != nil {
 		tracing.LogObject(sp, "use session", true)
 		res, err = ss.WithTransaction(ctx, func(ctx mongo.SessionContext) (interface{}, error) {
@@ -38,9 +39,9 @@ func (r *RepositoryAccessToken) UpdateAccessToken(ctx context.Context, filter, i
 	}
 
 	if err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
+		return tracing.LogError(sp, codes.Wrap(err, 501))
 	}
 
 	tracing.LogResponse(sp, res)
-	return res, nil
+	return nil
 }

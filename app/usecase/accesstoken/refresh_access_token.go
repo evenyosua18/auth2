@@ -91,7 +91,7 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 	}
 
 	// update access token
-	if _, err := u.accessToken.UpdateAccessToken(tracing.Context(sp), struct {
+	if err := u.accessToken.UpdateAccessToken(tracing.Context(sp), struct {
 		Id *primitive.ObjectID
 	}{
 		Id: &refreshToken.AccessTokenId,

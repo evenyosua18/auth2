@@ -19,6 +19,7 @@ const (
 	TokenDuration   = "TOKEN_DURATION"
 	TokenPublicKey  = "TOKEN_PUBLIC_KEY"
 	TokenPrivateKey = "TOKEN_PRIVATE_KEY"
+	TokenSignature  = "TOKEN_SIGNATURE"
 
 	MaxRefreshToken = "MAX_REFRESH_TOKEN"
 )

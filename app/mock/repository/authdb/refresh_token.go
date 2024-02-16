@@ -2,8 +2,6 @@ package authdb
 
 import (
 	"context"
-	"errors"
-	"github.com/evenyosua18/auth2/app/model"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -19,17 +17,7 @@ func (m *MRefreshTokenRepository) InsertRefreshToken(ctx context.Context, in int
 
 func (m *MRefreshTokenRepository) GetRefreshToken(ctx context.Context, filter interface{}) (interface{}, error) {
 	args := m.Called(ctx, filter)
-	res := args.Get(0)
-
-	if res == nil {
-		return res, args.Error(1)
-	} else if _, ok := res.(model.RefreshTokenModel); !ok {
-		return nil, errors.New("invalid object")
-	} else if ok {
-		return res, nil
-	}
-
-	return nil, errors.New("invalid args")
+	return args.Get(0), args.Error(1)
 }
 
 func (m *MRefreshTokenRepository) DeleteRefreshToken(ctx context.Context, filter interface{}) error {

@@ -18,7 +18,7 @@ func TestOauthClientUsecase_ValidateOauthClient(t *testing.T) {
 		// context
 		ctx := context.Background()
 
-		//init repo
+		// init repo
 		oauthClientRepo := &authdb.MOauthClientRepository{}
 
 		Convey("Positive Scenario", func() {

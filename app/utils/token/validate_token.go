@@ -44,6 +44,8 @@ func ValidateToken(ctx context.Context, token string) (jwt.MapClaims, error) {
 		return nil, tracing.LogError(sp, codes.Wrap(nil, 424))
 	}
 
+	claims[constant.ClaimsExpired] = int64(claims[constant.ClaimsExpired].(float64))
+
 	tracing.LogResponse(sp, claims)
 	return claims, nil
 }

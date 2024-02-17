@@ -38,7 +38,7 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 	}
 
 	// check token expired
-	if claims[constant.ClaimsExpired].(int64) > time.Now().Unix() {
+	if claims[constant.ClaimsExpired].(int64) < time.Now().Unix() {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 427))
 	}
 
@@ -50,7 +50,7 @@ func (u *UsecaseAccessToken) RefreshAccessToken(ctx context.Context, in interfac
 	})
 
 	if err != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
+		return nil, tracing.LogError(sp, err)
 	}
 
 	// decode refresh token

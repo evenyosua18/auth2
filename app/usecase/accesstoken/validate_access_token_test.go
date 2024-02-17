@@ -3,17 +3,23 @@ package accesstoken
 import (
 	"context"
 	"errors"
+	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/mock/repository/authdb"
 	"github.com/evenyosua18/auth2/app/model"
 	"github.com/evenyosua18/auth2/app/utils/token"
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"os"
 	"testing"
 	"time"
 )
 
 func TestAccessTokenUsecase_ValidateAccessToken(t *testing.T) {
+	// set env
+	os.Setenv(constant.TokenDuration, "24")
+	os.Setenv(constant.TokenSignature, "TestOauth2")
+
 	// context
 	ctx := context.Background()
 

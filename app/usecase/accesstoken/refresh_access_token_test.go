@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func TestAccessTokenUsecase_RefreshAccessToken(t *testing.T) {
+func TestUsecaseAccessToken_RefreshAccessToken(t *testing.T) {
 	// set env
 	os.Setenv(constant.TokenDuration, "24")
 	os.Setenv(constant.TokenSignature, "TestOauth2")

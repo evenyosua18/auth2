@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestAccessTokenUsecase_PasswordGrant(t *testing.T) {
+func TestUsecaseAccessToken_PasswordGrant(t *testing.T) {
 	// context
 	ctx := context.Background()
 

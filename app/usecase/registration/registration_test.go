@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestRegistration_Creation(t *testing.T) {
+func TestNewRegistrationUsecase(t *testing.T) {
 	Convey("Test Registration Usecase Creation", t, func() {
 		Convey("creation should return valid struct", func() {
 			// mock repository

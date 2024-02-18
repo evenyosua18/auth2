@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestOauthClient_Creation(t *testing.T) {
+func TestNewOauthClientUsecase(t *testing.T) {
 	Convey("Test Oauth Client Usecase Creation", t, func() {
 		// mock oauth client repository
 		oauthClientRepo := &authdb.MOauthClientRepository{}

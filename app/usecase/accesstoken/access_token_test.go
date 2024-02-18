@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func TestAccessTokenUsecase_Creation(t *testing.T) {
+func TestNewAccessTokenUsecase(t *testing.T) {
 	Convey("Test Access Token Usecase Creation", t, func() {
 		Convey("creation should return valid struct", func() {
 			// mock repository
@@ -38,7 +38,7 @@ func TestAccessTokenUsecase_Creation(t *testing.T) {
 	})
 }
 
-func TestAccessTokenUsecase_ManageAccessToken(t *testing.T) {
+func TestNewAccessTokenUsecase_ManageAccessToken(t *testing.T) {
 	Convey("Test Manage Access Token", t, func() {
 		os.Setenv(constant.TokenDuration, "24")
 		os.Setenv(constant.TokenSignature, "TestOauth2")

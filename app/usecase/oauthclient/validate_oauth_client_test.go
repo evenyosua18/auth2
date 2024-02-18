@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func TestOauthClientUsecase_ValidateOauthClient(t *testing.T) {
+func TestUsecaseOauthClient_ValidateOauthClient(t *testing.T) {
 	Convey("Test Validate Oauth Client", t, func() {
 		// context
 		ctx := context.Background()

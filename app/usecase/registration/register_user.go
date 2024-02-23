@@ -54,7 +54,7 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 		Phone:      req.Phone,
 		CheckExist: true,
 	}); err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
-		return nil, tracing.LogError(sp, codes.Wrap(err, 500))
+		return nil, err
 	} else if user != nil {
 		return nil, tracing.LogError(sp, codes.Wrap(nil, 410))
 	}

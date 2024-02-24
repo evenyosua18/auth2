@@ -16,7 +16,7 @@ func (r *RepositoryRefreshToken) InsertRefreshToken(ctx context.Context, in inte
 	defer tracing.Close(sp)
 
 	// model
-	refreshToken := model.RefreshTokenModel{}.SetCreated
+	refreshToken := model.RefreshTokenModel{}.SetCreated()
 	if err = mapstructure.Decode(in, &refreshToken); err != nil {
 		return tracing.LogError(sp, codes.Wrap(err, 502))
 	}

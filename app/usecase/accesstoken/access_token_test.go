@@ -26,7 +26,7 @@ func TestNewAccessTokenUsecase(t *testing.T) {
 			res := NewAccessTokenUsecase(oauthClientRepo, userRepo, accessTokenRepo, refreshTokenRepo)
 
 			// response should be valid
-			Convey("validate response should be valid", func() {
+			Convey("result should be valid", func() {
 				So(res, ShouldEqual, &UsecaseAccessToken{
 					oauthClient:  oauthClientRepo,
 					user:         userRepo,

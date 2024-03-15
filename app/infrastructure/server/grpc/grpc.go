@@ -1,8 +1,10 @@
 package grpc
 
 import (
+	"context"
 	"fmt"
 	"github.com/evenyosua18/auth2/app/constant"
+	"github.com/evenyosua18/auth2/app/infrastructure/container"
 	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/middleware"
 	"github.com/evenyosua18/auth2/app/repository"
 	"github.com/evenyosua18/auth2/app/utils/grpchelper"
@@ -14,10 +16,7 @@ import (
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
 	"log"
-	"net"
 	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
@@ -51,7 +50,7 @@ func RunServer() {
 	sentry_helper.SetSkippedCaller(5, 3)
 	sentry_helper.SetNamingRules(&grpchelper.ManageSentry{})
 	tracing.SetTracer(sentry_helper.Get())
-	tracing.ShowLog()
+	//tracing.ShowLog()
 
 	//init codes
 	codes.RegisterCode(os.Getenv(constant.CodePath))
@@ -70,26 +69,32 @@ func RunServer() {
 
 	//register grpc server
 	Apply(grpcServer)
+
 	reflection.Register(grpcServer)
 
+	// init registration endpoint service
+	endpointUC := container.InitializeEndpointUsecase(repository.Con.MainMongoDB)
+	ctx := context.Background()
+	endpointUC.RegisterGRPC(ctx, grpcServer.GetServiceInfo())
+
 	//run grpc server
-	go func() {
-		lis, err := net.Listen("tcp", fmt.Sprintf(`%s:%s`, os.Getenv(constant.GrpcHost), os.Getenv(constant.GrpcPort)))
-
-		if err != nil {
-			log.Fatalf("failed to listen: %v", err)
-		}
-
-		if err = grpcServer.Serve(lis); err != nil {
-			log.Fatalf("failed to start grpc server: %v", err)
-		}
-	}()
+	//go func() {
+	//	lis, err := net.Listen("tcp", fmt.Sprintf(`%s:%s`, os.Getenv(constant.GrpcHost), os.Getenv(constant.GrpcPort)))
+	//
+	//	if err != nil {
+	//		log.Fatalf("failed to listen: %v", err)
+	//	}
+	//
+	//	if err = grpcServer.Serve(lis); err != nil {
+	//		log.Fatalf("failed to start grpc server: %v", err)
+	//	}
+	//}()
 
 	log.Println(fmt.Sprintf("grpc server is running at %s:%s", os.Getenv(constant.GrpcHost), os.Getenv(constant.GrpcPort)))
 
 	//get signal when server interrupted
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-	sig := <-c
-	log.Fatalf("process killed with signal: %s", sig.String())
+	//c := make(chan os.Signal)
+	//signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	//sig := <-c
+	//log.Fatalf("process killed with signal: %s", sig.String())
 }

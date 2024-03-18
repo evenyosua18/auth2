@@ -19,6 +19,10 @@ codes:
     error: error when trying to start database session
     message: there is an internal issue, we will fix it as soon as possible
     response_code: 13
+  - code: 505
+    error: request model from parameter is nil
+    message: there is an internal issue, we will fix it as soon as possible
+    response_code: 13
 
   - code: 400
     error: bad request

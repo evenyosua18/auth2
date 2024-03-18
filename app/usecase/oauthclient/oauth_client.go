@@ -9,11 +9,7 @@ type IOauthClientUsecase interface {
 	ValidateOauthClient(ctx context.Context, in interface{}) error
 }
 
-type IOauthClientBuilder interface {
-}
-
 type UsecaseOauthClient struct {
-	//out         IOauthClientBuilder
 	oauthClient oauthclient.IOauthClientRepository
 }
 

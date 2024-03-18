@@ -20,6 +20,7 @@ const (
 	TokenDuration   = "TOKEN_DURATION"
 	TokenPublicKey  = "TOKEN_PUBLIC_KEY"
 	TokenPrivateKey = "TOKEN_PRIVATE_KEY"
+	TokenSignature  = "TOKEN_SIGNATURE"
 
 	SyncEndpoint = "SYNC_ENDPOINT"
 

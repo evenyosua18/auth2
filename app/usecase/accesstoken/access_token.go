@@ -40,6 +40,10 @@ func NewAccessTokenUsecase(oauthClientRepo oauthclient.IOauthClientRepository, u
 // just for decrease redundancy
 
 func (u *UsecaseAccessToken) manageAccessToken(sp interface{}, user *model.UserModel, count int) (interface{}, error) {
+	if user == nil {
+		return nil, tracing.LogError(sp, codes.Wrap(nil, 505))
+	}
+
 	// create token model
 	savedToken := model.AccessTokenModel{
 		Id:     primitive.NewObjectID(),

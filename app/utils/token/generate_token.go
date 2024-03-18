@@ -3,6 +3,7 @@ package token
 import (
 	"context"
 	"crypto/rsa"
+	"errors"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/tracing"
 	"github.com/golang-jwt/jwt/v5"
@@ -38,28 +39,40 @@ func GenerateToken(ctx context.Context, uuid string, info ClaimsInformation) (to
 	var rsaKey []byte
 	rsaKey, err = os.ReadFile(os.Getenv(constant.TokenPrivateKey))
 
-	if err != nil {
-		tracing.LogError(sp, err)
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		err = tracing.LogError(sp, err)
 		return
 	}
 
 	var key *rsa.PrivateKey
-	key, err = jwt.ParseRSAPrivateKeyFromPEM(rsaKey)
-	if err != nil {
-		tracing.LogError(sp, err)
-		return
+	if rsaKey != nil {
+		key, err = jwt.ParseRSAPrivateKeyFromPEM(rsaKey)
+		if err != nil {
+			err = tracing.LogError(sp, err)
+			return
+		}
 	}
 
-	token, err = jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
-		constant.ClaimsId:       uuid,
-		constant.ClaimsUsername: info.Username,
-		constant.ClaimsEmail:    info.Email,
-		constant.ClaimsPhone:    info.Phone,
-		constant.ClaimsExpired:  expiredAt.Unix(),
-	}).SignedString(key)
+	if key != nil {
+		token, err = jwt.NewWithClaims(jwt.SigningMethodRS256, jwt.MapClaims{
+			constant.ClaimsId:       uuid,
+			constant.ClaimsUsername: info.Username,
+			constant.ClaimsEmail:    info.Email,
+			constant.ClaimsPhone:    info.Phone,
+			constant.ClaimsExpired:  expiredAt.Unix(),
+		}).SignedString(key)
+	} else {
+		token, err = jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			constant.ClaimsId:       uuid,
+			constant.ClaimsUsername: info.Username,
+			constant.ClaimsEmail:    info.Email,
+			constant.ClaimsPhone:    info.Phone,
+			constant.ClaimsExpired:  expiredAt.Unix(),
+		}).SignedString([]byte(os.Getenv(constant.TokenSignature)))
+	}
 
 	if err != nil {
-		tracing.LogError(sp, err)
+		err = tracing.LogError(sp, err)
 		return
 	}
 

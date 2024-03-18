@@ -128,7 +128,7 @@ func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface
 	}
 
 	// save refresh token
-	if err := u.refreshToken.InsertRefreshToken(childCtx, refreshToken); err != nil {
+	if err := u.refreshToken.InsertRefreshToken(childCtx, refreshToken.SetCreated()); err != nil {
 		return nil, tracing.LogError(sp, err)
 	}
 

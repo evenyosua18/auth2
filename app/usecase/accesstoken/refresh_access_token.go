@@ -124,7 +124,7 @@ func (u *UsecaseAccessToken) generateNewRefreshToken(sp interface{}, prevRefresh
 	}
 
 	// saved new refresh token
-	if err = u.refreshToken.InsertRefreshToken(tracing.Context(sp), refreshToken); err != nil {
+	if err = u.refreshToken.InsertRefreshToken(tracing.Context(sp), refreshToken.SetCreated()); err != nil {
 		return nil, tracing.LogError(sp, err)
 	}
 

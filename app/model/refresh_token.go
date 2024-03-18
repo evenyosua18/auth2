@@ -29,13 +29,15 @@ type (
 	}
 )
 
-func (m RefreshTokenModel) SetCreated() {
+func (m RefreshTokenModel) SetCreated() RefreshTokenModel {
 	if m.Id.IsZero() {
 		m.Id = primitive.NewObjectID()
 	}
 
 	m.CreatedAt = time.Now()
 	m.UpdatedAt = time.Now()
+
+	return m
 }
 
 func (f RefreshTokenFilter) Aggregate(additions ...bson.M) []bson.M {

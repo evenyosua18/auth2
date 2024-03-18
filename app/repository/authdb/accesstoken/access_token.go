@@ -10,7 +10,7 @@ type IAccessTokenRepository interface {
 	InsertAccessToken(ctx context.Context, in interface{}) error
 	GetAccessToken(ctx context.Context, filter interface{}) (interface{}, error)
 	DeleteAccessToken(ctx context.Context, filter interface{}) error
-	UpdateAccessToken(ctx context.Context, filter, in interface{}) (interface{}, error)
+	UpdateAccessToken(ctx context.Context, filter, in interface{}) error
 }
 
 type RepositoryAccessToken struct {

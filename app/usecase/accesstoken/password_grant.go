@@ -40,7 +40,11 @@ func (u *UsecaseAccessToken) PasswordGrant(ctx context.Context, in interface{}) 
 		return nil, tracing.LogError(sp, err)
 	}
 
-	user := userRes.(*model.UserModel)
+	user, ok := userRes.(*model.UserModel)
+
+	if !ok {
+		return nil, tracing.LogError(sp, codes.Wrap(nil, 502))
+	}
 
 	// check user password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {

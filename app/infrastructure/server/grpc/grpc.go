@@ -16,7 +16,10 @@ import (
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
 	"log"
+	"net"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -49,6 +52,7 @@ func RunServer() {
 	sentry_helper.SetRouter(&grpchelper.GrpcHelper{})
 	sentry_helper.SetSkippedCaller(5, 3)
 	sentry_helper.SetNamingRules(&grpchelper.ManageSentry{})
+	//sentry_helper.ShowSentryLog()
 	tracing.SetTracer(sentry_helper.Get())
 	//tracing.ShowLog()
 
@@ -72,29 +76,43 @@ func RunServer() {
 
 	reflection.Register(grpcServer)
 
-	// init registration endpoint service
-	endpointUC := container.InitializeEndpointUsecase(repository.Con.MainMongoDB)
-	ctx := context.Background()
-	endpointUC.RegisterGRPC(ctx, grpcServer.GetServiceInfo())
+	// sync registration endpoint service
+	if os.Getenv(constant.SyncEndpoint) == constant.True {
+		syncEndpoints(grpcServer)
+	}
 
 	//run grpc server
-	//go func() {
-	//	lis, err := net.Listen("tcp", fmt.Sprintf(`%s:%s`, os.Getenv(constant.GrpcHost), os.Getenv(constant.GrpcPort)))
-	//
-	//	if err != nil {
-	//		log.Fatalf("failed to listen: %v", err)
-	//	}
-	//
-	//	if err = grpcServer.Serve(lis); err != nil {
-	//		log.Fatalf("failed to start grpc server: %v", err)
-	//	}
-	//}()
+	go func() {
+		lis, err := net.Listen("tcp", fmt.Sprintf(`%s:%s`, os.Getenv(constant.GrpcHost), os.Getenv(constant.GrpcPort)))
+
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		}
+
+		if err = grpcServer.Serve(lis); err != nil {
+			log.Fatalf("failed to start grpc server: %v", err)
+		}
+	}()
 
 	log.Println(fmt.Sprintf("grpc server is running at %s:%s", os.Getenv(constant.GrpcHost), os.Getenv(constant.GrpcPort)))
 
 	//get signal when server interrupted
-	//c := make(chan os.Signal)
-	//signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-	//sig := <-c
-	//log.Fatalf("process killed with signal: %s", sig.String())
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	sig := <-c
+	log.Fatalf("process killed with signal: %s", sig.String())
+}
+
+func syncEndpoints(server *grpc.Server) {
+	// init endpoint usecase
+	endpointUC := container.InitializeEndpointUsecase(repository.Con.MainMongoDB)
+
+	// create context
+	ctx := context.Background()
+
+	// call registration function
+	res := endpointUC.RegisterGRPC(ctx, server.GetServiceInfo())
+
+	// show result
+	log.Println("sync success with result: ", res)
 }

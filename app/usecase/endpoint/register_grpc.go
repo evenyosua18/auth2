@@ -22,7 +22,7 @@ type reportRegisterGRPC struct {
 	ListNotExistEndpoints   []string
 }
 
-func (u *UsecaseRegistrationEndpoint) RegisterGRPC(ctx context.Context, listEndpoint map[string]grpc.ServiceInfo) {
+func (u *UsecaseRegistrationEndpoint) RegisterGRPC(ctx context.Context, listEndpoint map[string]grpc.ServiceInfo) interface{} {
 	// tracing
 	sp := tracing.StartChild(ctx)
 	defer tracing.Close(sp)
@@ -37,7 +37,7 @@ func (u *UsecaseRegistrationEndpoint) RegisterGRPC(ctx context.Context, listEndp
 
 	if err != nil {
 		log.Println(tracing.LogError(sp, err))
-		return
+		return err
 	}
 
 	// type conversion
@@ -45,7 +45,7 @@ func (u *UsecaseRegistrationEndpoint) RegisterGRPC(ctx context.Context, listEndp
 
 	if !ok {
 		log.Println(tracing.LogError(sp, codes.Wrap(nil, 502)))
-		return
+		return err
 	}
 
 	// map current endpoints
@@ -105,4 +105,5 @@ func (u *UsecaseRegistrationEndpoint) RegisterGRPC(ctx context.Context, listEndp
 	}
 
 	tracing.LogResponse(sp, report)
+	return report
 }

@@ -21,5 +21,7 @@ const (
 	TokenPublicKey  = "TOKEN_PUBLIC_KEY"
 	TokenPrivateKey = "TOKEN_PRIVATE_KEY"
 
+	SyncEndpoint = "SYNC_ENDPOINT"
+
 	MaxRefreshToken = "MAX_REFRESH_TOKEN"
 )

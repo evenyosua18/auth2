@@ -7,7 +7,7 @@ import (
 )
 
 type IRegistrationEndpointUsecase interface {
-	RegisterGRPC(context.Context, map[string]grpc.ServiceInfo)
+	RegisterGRPC(context.Context, map[string]grpc.ServiceInfo) interface{}
 }
 
 type UsecaseRegistrationEndpoint struct {

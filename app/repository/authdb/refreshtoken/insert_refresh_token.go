@@ -33,6 +33,7 @@ func (r *RepositoryRefreshToken) InsertRefreshToken(ctx context.Context, in inte
 	}
 
 	if err != nil {
+		tracing.LogObject(sp, "insert_object", refreshToken)
 		return tracing.LogError(sp, codes.Wrap(err, 501))
 	}
 

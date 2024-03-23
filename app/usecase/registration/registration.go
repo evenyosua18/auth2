@@ -40,7 +40,7 @@ type UsecaseRegistrationEndpoint struct {
 	IgnorePrefixes map[string]bool
 }
 
-func NewUsecaseRegistrationEndpoint(endpointUC endpoint.IEndpointRepository) IRegistrationEndpointUsecase {
+func NewRegistrationEndpointUsecase(endpointUC endpoint.IEndpointRepository) IRegistrationEndpointUsecase {
 	// ignore prefix
 	ignorePrefixes := map[string]bool{
 		"grpc": true,

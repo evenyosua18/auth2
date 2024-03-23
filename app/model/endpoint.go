@@ -24,6 +24,7 @@ type (
 		Service    string
 		Endpoint   string
 		IsGenerate *bool
+		StillExist *bool
 
 		Deleted bool
 	}
@@ -65,7 +66,12 @@ func (f EndpointFilter) Filter() bson.M {
 
 	// is generate
 	if f.IsGenerate != nil {
-		filter["is_generate"] = true
+		filter["is_generate"] = f.IsGenerate
+	}
+
+	// still exist
+	if f.StillExist != nil {
+		filter["still_exist"] = f.StillExist
 	}
 
 	return filter
@@ -80,6 +86,11 @@ func (m EndpointModel) Update() bson.M {
 	// is_generate
 	if m.IsGenerate != nil {
 		updated["is_generate"] = m.IsGenerate
+	}
+
+	// still_exist
+	if m.StillExist != nil {
+		updated["still_exist"] = m.StillExist
 	}
 
 	// service

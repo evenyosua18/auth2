@@ -31,7 +31,7 @@ type UserRegistrationResponse struct {
 	ExpiredAt    int64
 }
 
-func (u *UsecaseRegistration) RegistrationUser(ctx context.Context, in interface{}) (interface{}, error) {
+func (u *UsecaseRegistrationUser) RegistrationUser(ctx context.Context, in interface{}) (interface{}, error) {
 	// tracing
 	sp := tracing.StartChild(ctx, in)
 	defer tracing.Close(sp)

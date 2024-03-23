@@ -11,12 +11,12 @@ type IRegistrationBuilder interface {
 }
 
 type ServiceRegistration struct {
-	uc  registration.IRegistrationUsecase
+	uc  registration.IRegistrationUserUsecase
 	out IRegistrationBuilder
 	pb.UnimplementedRegistrationServiceServer
 }
 
-func NewRegistrationService(out IRegistrationBuilder, uc registration.IRegistrationUsecase) *ServiceRegistration {
+func NewRegistrationService(out IRegistrationBuilder, uc registration.IRegistrationUserUsecase) *ServiceRegistration {
 	return &ServiceRegistration{
 		out: out,
 		uc:  uc,

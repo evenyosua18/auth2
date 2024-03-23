@@ -55,7 +55,7 @@ func TestUsecaseRegistration_RegistrationUser(t *testing.T) {
 				refreshTokenRepo.On("InsertRefreshToken", mock.Anything, mock.Anything).Return(nil).Once()
 
 				// new usecase
-				uc := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+				uc := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 				// registration user
 				res, err := uc.RegistrationUser(ctx, req)
@@ -117,7 +117,7 @@ func TestUsecaseRegistration_RegistrationUser(t *testing.T) {
 				userRepo.On("GetUser", mock.Anything, mock.Anything).Return(&getUserResponse, nil).Once()
 
 				// new usecase
-				uc := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+				uc := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 				// registration user
 				res, err := uc.RegistrationUser(ctx, req)
@@ -138,7 +138,7 @@ func TestUsecaseRegistration_RegistrationUser(t *testing.T) {
 		Convey("Negative Scenario", func() {
 			Convey("invalid request", func() {
 				// new usecase
-				uc := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+				uc := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 				// registration user
 				res, err := uc.RegistrationUser(ctx, "TEST")
@@ -176,7 +176,7 @@ func TestUsecaseRegistration_RegistrationUser(t *testing.T) {
 				userRepo.On("GetUser", mock.Anything, mock.Anything).Return(nil, errRes).Once()
 
 				// new usecase
-				uc := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+				uc := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 				// registration user
 				res, err := uc.RegistrationUser(ctx, req)
@@ -215,7 +215,7 @@ func TestUsecaseRegistration_RegistrationUser(t *testing.T) {
 				userRepo.On("InsertUser", mock.Anything, mock.Anything).Return(errRes).Once()
 
 				// new usecase
-				uc := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+				uc := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 				// registration user
 				res, err := uc.RegistrationUser(ctx, req)
@@ -257,7 +257,7 @@ func TestUsecaseRegistration_RegistrationUser(t *testing.T) {
 				accessTokenRepo.On("InsertAccessToken", mock.Anything, mock.Anything).Return(errRes).Once()
 
 				// new usecase
-				uc := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+				uc := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 				// registration user
 				res, err := uc.RegistrationUser(ctx, req)
@@ -302,7 +302,7 @@ func TestUsecaseRegistration_RegistrationUser(t *testing.T) {
 				refreshTokenRepo.On("InsertRefreshToken", mock.Anything, mock.Anything).Return(errRes).Once()
 
 				// new usecase
-				uc := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+				uc := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 				// registration user
 				res, err := uc.RegistrationUser(ctx, req)

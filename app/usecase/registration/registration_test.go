@@ -14,11 +14,11 @@ func TestNewRegistrationUsecase(t *testing.T) {
 			accessTokenRepo := &authdb.MAccessTokenRepository{}
 			refreshTokenRepo := &authdb.MRefreshTokenRepository{}
 
-			res := NewRegistrationUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+			res := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 			// response should be valid
 			Convey("validate response should be valid", func() {
-				So(res, ShouldEqual, &UsecaseRegistration{
+				So(res, ShouldEqual, &UsecaseRegistrationUser{
 					user:         userRepo,
 					accessToken:  accessTokenRepo,
 					refreshToken: refreshTokenRepo,

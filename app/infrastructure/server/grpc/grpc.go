@@ -105,7 +105,7 @@ func RunServer() {
 
 func syncEndpoints(server *grpc.Server) {
 	// init endpoint usecase
-	endpointUC := container.InitializeEndpointUsecase(repository.Con.MainMongoDB)
+	endpointUC := container.InitializeRegistrationEndpointUsecase(repository.Con.MainMongoDB)
 
 	// create context
 	ctx := context.Background()

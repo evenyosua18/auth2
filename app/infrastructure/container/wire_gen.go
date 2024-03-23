@@ -30,14 +30,6 @@ func InitializeAccessTokenUsecase(connection *db.MongoConnection) accesstoken.IA
 	return iAccessTokenUsecase
 }
 
-// Injectors from endpoint_usecase.go:
-
-func InitializeEndpointUsecase(connection *db.MongoConnection) endpoint.IRegistrationEndpointUsecase {
-	iEndpointRepository := endpoint2.NewEndpointRepository(connection)
-	iRegistrationEndpointUsecase := endpoint.NewUsecaseRegistrationEndpoint(iEndpointRepository)
-	return iRegistrationEndpointUsecase
-}
-
 // Injectors from oauth_client_usecase.go:
 
 func InitializeOauthClientUsecase(connection *db.MongoConnection) oauthclient2.IOauthClientUsecase {
@@ -48,10 +40,16 @@ func InitializeOauthClientUsecase(connection *db.MongoConnection) oauthclient2.I
 
 // Injectors from registration_usecase.go:
 
-func InitializeRegistrationUsecase(connection *db.MongoConnection) registration.IRegistrationUsecase {
+func InitializeRegistrationUserUsecase(connection *db.MongoConnection) registration.IRegistrationUserUsecase {
 	iUserRepository := user.NewUserRepository(connection)
 	iAccessTokenRepository := accesstoken2.NewAccessTokenRepository(connection)
 	iRefreshTokenRepository := refreshtoken.NewRefreshTokenRepository(connection)
-	iRegistrationUsecase := registration.NewRegistrationUsecase(iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
-	return iRegistrationUsecase
+	iRegistrationUserUsecase := registration.NewRegistrationUserUsecase(iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
+	return iRegistrationUserUsecase
+}
+
+func InitializeRegistrationEndpointUsecase(connection *db.MongoConnection) endpoint.IRegistrationEndpointUsecase {
+	iEndpointRepository := endpoint2.NewEndpointRepository(connection)
+	iRegistrationEndpointUsecase := endpoint.NewUsecaseRegistrationEndpoint(iEndpointRepository)
+	return iRegistrationEndpointUsecase
 }

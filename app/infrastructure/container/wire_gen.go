@@ -8,10 +8,12 @@ package container
 
 import (
 	accesstoken2 "github.com/evenyosua18/auth2/app/repository/authdb/accesstoken"
+	endpoint2 "github.com/evenyosua18/auth2/app/repository/authdb/endpoint"
 	"github.com/evenyosua18/auth2/app/repository/authdb/oauthclient"
 	"github.com/evenyosua18/auth2/app/repository/authdb/refreshtoken"
 	"github.com/evenyosua18/auth2/app/repository/authdb/user"
 	"github.com/evenyosua18/auth2/app/usecase/accesstoken"
+	"github.com/evenyosua18/auth2/app/usecase/endpoint"
 	oauthclient2 "github.com/evenyosua18/auth2/app/usecase/oauthclient"
 	"github.com/evenyosua18/auth2/app/usecase/registration"
 	"github.com/evenyosua18/auth2/app/utils/db"
@@ -38,10 +40,16 @@ func InitializeOauthClientUsecase(connection *db.MongoConnection) oauthclient2.I
 
 // Injectors from registration_usecase.go:
 
-func InitializeRegistrationUsecase(connection *db.MongoConnection) registration.IRegistrationUsecase {
+func InitializeRegistrationUserUsecase(connection *db.MongoConnection) registration.IRegistrationUserUsecase {
 	iUserRepository := user.NewUserRepository(connection)
 	iAccessTokenRepository := accesstoken2.NewAccessTokenRepository(connection)
 	iRefreshTokenRepository := refreshtoken.NewRefreshTokenRepository(connection)
-	iRegistrationUsecase := registration.NewRegistrationUsecase(iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
-	return iRegistrationUsecase
+	iRegistrationUserUsecase := registration.NewRegistrationUserUsecase(iUserRepository, iAccessTokenRepository, iRefreshTokenRepository)
+	return iRegistrationUserUsecase
+}
+
+func InitializeRegistrationEndpointUsecase(connection *db.MongoConnection) endpoint.IRegistrationEndpointUsecase {
+	iEndpointRepository := endpoint2.NewEndpointRepository(connection)
+	iRegistrationEndpointUsecase := endpoint.NewUsecaseRegistrationEndpoint(iEndpointRepository)
+	return iRegistrationEndpointUsecase
 }

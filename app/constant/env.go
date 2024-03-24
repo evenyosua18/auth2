@@ -1,8 +1,9 @@
 package constant
 
 const (
-	AppName = "APP_NAME"
-	AppEnv  = "APP_ENV"
+	AppName    = "APP_NAME"
+	AppEnv     = "APP_ENV"
+	AppService = "APP_SERVICE"
 
 	GrpcHost = "GRPC_HOST"
 	GrpcPort = "GRPC_PORT"
@@ -20,6 +21,8 @@ const (
 	TokenPublicKey  = "TOKEN_PUBLIC_KEY"
 	TokenPrivateKey = "TOKEN_PRIVATE_KEY"
 	TokenSignature  = "TOKEN_SIGNATURE"
+
+	SyncEndpoint = "SYNC_ENDPOINT"
 
 	MaxRefreshToken = "MAX_REFRESH_TOKEN"
 )

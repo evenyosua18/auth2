@@ -8,3 +8,8 @@ const (
 	True  = "true"
 	False = "false"
 )
+
+var (
+	TrueValue  = true
+	FalseValue = false
+)

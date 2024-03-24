@@ -1,8 +1,10 @@
 package grpc
 
 import (
+	"context"
 	"fmt"
 	"github.com/evenyosua18/auth2/app/constant"
+	"github.com/evenyosua18/auth2/app/infrastructure/container"
 	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/middleware"
 	"github.com/evenyosua18/auth2/app/repository"
 	"github.com/evenyosua18/auth2/app/utils/grpchelper"
@@ -50,8 +52,9 @@ func RunServer() {
 	sentry_helper.SetRouter(&grpchelper.GrpcHelper{})
 	sentry_helper.SetSkippedCaller(5, 3)
 	sentry_helper.SetNamingRules(&grpchelper.ManageSentry{})
+	//sentry_helper.ShowSentryLog()
 	tracing.SetTracer(sentry_helper.Get())
-	tracing.ShowLog()
+	//tracing.ShowLog()
 
 	//init codes
 	codes.RegisterCode(os.Getenv(constant.CodePath))
@@ -70,7 +73,13 @@ func RunServer() {
 
 	//register grpc server
 	Apply(grpcServer)
+
 	reflection.Register(grpcServer)
+
+	// sync registration endpoint service
+	if os.Getenv(constant.SyncEndpoint) == constant.True {
+		syncEndpoints(grpcServer)
+	}
 
 	//run grpc server
 	go func() {
@@ -92,4 +101,18 @@ func RunServer() {
 	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	sig := <-c
 	log.Fatalf("process killed with signal: %s", sig.String())
+}
+
+func syncEndpoints(server *grpc.Server) {
+	// init endpoint usecase
+	endpointUC := container.InitializeRegistrationEndpointUsecase(repository.Con.MainMongoDB)
+
+	// create context
+	ctx := context.Background()
+
+	// call registration function
+	res := endpointUC.RegisterGRPC(ctx, server.GetServiceInfo())
+
+	// show result
+	log.Println("sync success with result: ", res)
 }

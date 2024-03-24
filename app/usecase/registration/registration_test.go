@@ -14,6 +14,7 @@ func TestNewRegistrationUserUsecase(t *testing.T) {
 			accessTokenRepo := &authdb.MAccessTokenRepository{}
 			refreshTokenRepo := &authdb.MRefreshTokenRepository{}
 
+			// new usecase
 			res := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
 
 			// response should be valid
@@ -32,18 +33,22 @@ func TestNewRegistrationEndpointUsecase(t *testing.T) {
 	Convey("Test Registration Endpoint Usecase Creation", t, func() {
 		Convey("creation should return valid struct", func() {
 			// mock repository
-			userRepo := &authdb.MUserRepository{}
-			accessTokenRepo := &authdb.MAccessTokenRepository{}
-			refreshTokenRepo := &authdb.MRefreshTokenRepository{}
+			endpointRepo := &authdb.MEndpointRepository{}
 
-			res := NewRegistrationUserUsecase(userRepo, accessTokenRepo, refreshTokenRepo)
+			// NOTE: this value depend on static value in the creation function
+			// ignore prefix value
+			ignorePrefix := map[string]bool{
+				"grpc": true,
+			}
+
+			// new usecase
+			res := NewRegistrationEndpointUsecase(endpointRepo)
 
 			// response should be valid
 			Convey("validate response should be valid", func() {
-				So(res, ShouldEqual, &UsecaseRegistrationUser{
-					user:         userRepo,
-					accessToken:  accessTokenRepo,
-					refreshToken: refreshTokenRepo,
+				So(res, ShouldEqual, &UsecaseRegistrationEndpoint{
+					endpoint:       endpointRepo,
+					IgnorePrefixes: ignorePrefix,
 				})
 			})
 		})

@@ -4,11 +4,9 @@ import (
 	"context"
 	"github.com/evenyosua18/auth2/app/constant"
 	"github.com/evenyosua18/auth2/app/model"
-	"github.com/evenyosua18/codes"
 	"github.com/evenyosua18/tracing"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/grpc"
-	"log"
 	"os"
 	"strings"
 )
@@ -36,16 +34,15 @@ func (u *UsecaseRegistrationEndpoint) RegisterGRPC(ctx context.Context, listEndp
 	})
 
 	if err != nil {
-		log.Println(tracing.LogError(sp, err))
+		//log.Println(tracing.LogError(sp, err))
 		return err
 	}
 
 	// type conversion
 	listCurrentEndpoint, ok := listCurrentEndpointI.([]model.EndpointModel)
-
 	if !ok {
-		log.Println(tracing.LogError(sp, codes.Wrap(nil, 502)))
-		return err
+		//log.Println(tracing.LogError(sp, codes.Wrap(nil, 502)))
+		return "TEST EVEN"
 	}
 
 	// map current endpoints

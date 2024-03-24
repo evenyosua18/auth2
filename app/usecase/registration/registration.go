@@ -41,6 +41,7 @@ type UsecaseRegistrationEndpoint struct {
 }
 
 func NewRegistrationEndpointUsecase(endpointUC endpoint.IEndpointRepository) IRegistrationEndpointUsecase {
+	// NOTE: if this value change, then need update the unit testing too.
 	// ignore prefix
 	ignorePrefixes := map[string]bool{
 		"grpc": true,

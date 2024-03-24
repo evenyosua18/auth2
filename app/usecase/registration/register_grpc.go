@@ -8,7 +8,6 @@ import (
 	"github.com/evenyosua18/tracing"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/grpc"
-	"log"
 	"os"
 	"strings"
 )
@@ -36,16 +35,14 @@ func (u *UsecaseRegistrationEndpoint) RegisterGRPC(ctx context.Context, listEndp
 	})
 
 	if err != nil {
-		log.Println(tracing.LogError(sp, err))
-		return err
+		return tracing.LogError(sp, err)
 	}
 
 	// type conversion
 	listCurrentEndpoint, ok := listCurrentEndpointI.([]model.EndpointModel)
 
 	if !ok {
-		log.Println(tracing.LogError(sp, codes.Wrap(nil, 502)))
-		return err
+		return tracing.LogError(sp, codes.Wrap(nil, 502))
 	}
 
 	// map current endpoints

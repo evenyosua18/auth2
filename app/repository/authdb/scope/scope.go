@@ -9,7 +9,7 @@ import (
 type IScopeRepository interface {
 	InsertScope(ctx context.Context, in interface{}) error
 	GetScope(ctx context.Context, filter interface{}) (interface{}, error)
-	//DeleteScope(ctx context.Context, filter interface{}) error
+	DeleteScope(ctx context.Context, filter interface{}) error
 	UpdateScope(ctx context.Context, in, filter interface{}) error
 	//ListScope(ctx context.Context, filter interface{}) (interface{}, error)
 }

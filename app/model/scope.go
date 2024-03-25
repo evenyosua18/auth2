@@ -27,7 +27,7 @@ type (
 	}
 )
 
-func (m ScopeModel) SetCreate() ScopeModel {
+func (m ScopeModel) SetCreated() ScopeModel {
 	if m.Id.IsZero() {
 		m.Id = primitive.NewObjectID()
 	}

@@ -14,7 +14,7 @@ func (r *RepositoryScope) InsertScope(ctx context.Context, in interface{}) error
 	defer tracing.Close(sp)
 
 	// set model
-	scope := model.ScopeModel{}.SetCreate()
+	scope := model.ScopeModel{}.SetCreated()
 	if err := mapstructure.Decode(in, &scope); err != nil {
 		return tracing.LogError(sp, codes.Wrap(err, 502))
 	}

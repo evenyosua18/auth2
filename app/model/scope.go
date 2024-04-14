@@ -67,7 +67,6 @@ func (f ScopeFilter) Filter() bson.M {
 		filter["service"] = f.Service
 	}
 
-	// TODO make sure again it works
 	if len(f.Endpoints) != 0 {
 		// convert to object id
 		var endpoints []primitive.ObjectID

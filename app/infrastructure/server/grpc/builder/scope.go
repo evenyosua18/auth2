@@ -39,6 +39,7 @@ func (s *ScopeBuilder) GetScopeResponse(ctx context.Context, in interface{}) (*p
 		listEndpoint = append(listEndpoint, &pb.EndpointData{
 			Id:         endpoint.Id.Hex(),
 			Service:    endpoint.Service,
+			Endpoint:   endpoint.Endpoint,
 			IsGenerate: *endpoint.IsGenerate,
 			StillExist: *endpoint.StillExist,
 			CreatedAt:  endpoint.CreatedAt.Format("2006-01-02 15:04:05"),

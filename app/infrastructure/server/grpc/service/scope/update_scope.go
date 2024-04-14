@@ -7,6 +7,7 @@ import (
 	"github.com/evenyosua18/codes"
 	"github.com/evenyosua18/tracing"
 	"github.com/golang/protobuf/ptypes/empty"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type filter struct {
@@ -16,7 +17,7 @@ type filter struct {
 type request struct {
 	Name      string
 	Service   string
-	Endpoints []string
+	Endpoints []primitive.ObjectID
 }
 
 func (s *ServiceScope) UpdateScope(ctx context.Context, in *pb.UpdateScopeRequest) (*empty.Empty, error) {
@@ -24,11 +25,20 @@ func (s *ServiceScope) UpdateScope(ctx context.Context, in *pb.UpdateScopeReques
 	sp := tracing.StartParent(grpchelper.SetTransactionName(ctx, "UpdateScope"))
 	defer tracing.Close(sp)
 
+	// manage endpoints
+	var endpoints []primitive.ObjectID
+	for _, endpoint := range in.Endpoints {
+
+		if endpointUuid, err := primitive.ObjectIDFromHex(endpoint); err == nil {
+			endpoints = append(endpoints, endpointUuid)
+		}
+	}
+
 	// update scope
 	if err := s.uc.UpdateScope(ctx, request{
 		Name:      in.Name,
 		Service:   in.Service,
-		Endpoints: in.Endpoints,
+		Endpoints: endpoints,
 	}, filter{
 		Id: in.Id,
 	}); err != nil {

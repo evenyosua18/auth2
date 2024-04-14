@@ -7,8 +7,9 @@ option go_package = ".;pb";
 message EndpointData {
   string Id = 1;
   string Service = 2;
-  bool IsGenerate = 3;
-  bool StillExist = 4;
-  string CreatedAt = 5;
-  string UpdatedAt = 6;
+  string Endpoint = 3;
+  bool IsGenerate = 4;
+  bool StillExist = 5;
+  string CreatedAt = 6;
+  string UpdatedAt = 7;
 }

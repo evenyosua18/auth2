@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/protobuf/empty.proto";
+import "general.proto";
+import "endpoint.proto";
+
+option go_package = ".;pb";
+
+message ScopeData {
+  string Id = 1;
+  string Service = 2;
+  string Name = 3;
+  repeated string Endpoints = 4;
+  string CreatedAt = 5;
+  string UpdatedAt = 6;
+  repeated EndpointData ListEndpoint = 7;
+}
+
+message GetScopeRequest {
+  string Id = 1;
+}
+
+message GetScopeResponse {
+  int32 Code = 1;
+  string Message = 2;
+  string ErrorMessage = 3;
+  ScopeData data = 4;
+}
+
+message CreateScopeRequest {
+  string Service = 1;
+  string Name = 2;
+  repeated string Endpoints = 3;
+}
+
+message GetScopesRequest {
+  PaginationRequest Pagination = 1;
+  SortRequest Sort = 2;
+  string Id = 3;
+  string Service = 4;
+  string Name = 5;
+  repeated string Endpoints = 6;
+}
+
+message GetScopesResponse {
+  int32 Code = 1;
+  string Message = 2;
+  string ErrorMessage = 3;
+  repeated ScopeData Data = 4;
+  Pagination Pagination = 5;
+  repeated Sort Sort = 6;
+}
+
+message UpdateScopeRequest {
+  string Id = 1;
+  string Service = 2;
+  string Name = 3;
+  repeated string Endpoints = 4;
+}
+
+service ScopeService {
+  rpc GetScope(GetScopeRequest) returns (GetScopeResponse);
+  rpc CreateScope(CreateScopeRequest) returns (google.protobuf.Empty);
+  rpc GetScopes(GetScopesRequest) returns (GetScopesResponse);
+  rpc UpdateScope(UpdateScopeRequest) returns (google.protobuf.Empty);
+}

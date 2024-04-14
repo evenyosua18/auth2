@@ -135,35 +135,108 @@ func TestEndpoint(t *testing.T) {
 		})
 
 		Convey("Test Filter", func() {
-			// const value
-			trueValue := true
-			id := primitive.NewObjectID()
+			Convey("with id field", func() {
+				// const value
+				trueValue := true
+				id := primitive.NewObjectID()
 
-			// set model
-			filter := EndpointFilter{
-				Id:         &id,
-				Service:    "TEST",
-				Endpoint:   "TEST",
-				IsGenerate: &trueValue,
-				StillExist: &trueValue,
-			}
+				// set model
+				filter := EndpointFilter{
+					Id:         &id,
+					Service:    "TEST",
+					Endpoint:   "TEST",
+					IsGenerate: &trueValue,
+					StillExist: &trueValue,
+				}
 
-			// expected result
-			expectedFilter := bson.M{
-				"deleted_at":  nil,
-				"_id":         &id,
-				"endpoint":    primitive.Regex{Pattern: "TEST", Options: "i"},
-				"is_generate": &trueValue,
-				"service":     "TEST",
-				"still_exist": &trueValue,
-			}
+				// expected result
+				expectedFilter := bson.M{
+					"deleted_at":  nil,
+					"_id":         &id,
+					"endpoint":    primitive.Regex{Pattern: "TEST", Options: "i"},
+					"is_generate": &trueValue,
+					"service":     "TEST",
+					"still_exist": &trueValue,
+				}
 
-			// filter
-			res := filter.Filter()
+				// filter
+				res := filter.Filter()
 
-			// result
-			Convey("filter should be same with the expected", func() {
-				So(res, ShouldEqual, expectedFilter)
+				// result
+				Convey("filter should be same with the expected", func() {
+					So(res, ShouldEqual, expectedFilter)
+				})
+			})
+
+			Convey("with list id field", func() {
+				// const value
+				trueValue := true
+				id := primitive.NewObjectID()
+
+				// set model
+				filter := EndpointFilter{
+					ListID: []primitive.ObjectID{
+						id,
+					},
+					Service:    "TEST",
+					Endpoint:   "TEST",
+					IsGenerate: &trueValue,
+					StillExist: &trueValue,
+				}
+
+				// expected result
+				expectedFilter := bson.M{
+					"deleted_at": nil,
+					"_id": bson.M{
+						"$in": []primitive.ObjectID{id},
+					},
+					"endpoint":    primitive.Regex{Pattern: "TEST", Options: "i"},
+					"is_generate": &trueValue,
+					"service":     "TEST",
+					"still_exist": &trueValue,
+				}
+
+				// filter
+				res := filter.Filter()
+
+				// result
+				Convey("filter should be same with the expected", func() {
+					So(res, ShouldEqual, expectedFilter)
+				})
+			})
+
+			Convey("if id and list id filled, list id will be ignored", func() {
+				// const value
+				trueValue := true
+				id := primitive.NewObjectID()
+
+				// set model
+				filter := EndpointFilter{
+					Id:         &id,
+					ListID:     []primitive.ObjectID{id},
+					Service:    "TEST",
+					Endpoint:   "TEST",
+					IsGenerate: &trueValue,
+					StillExist: &trueValue,
+				}
+
+				// expected result
+				expectedFilter := bson.M{
+					"deleted_at":  nil,
+					"_id":         &id,
+					"endpoint":    primitive.Regex{Pattern: "TEST", Options: "i"},
+					"is_generate": &trueValue,
+					"service":     "TEST",
+					"still_exist": &trueValue,
+				}
+
+				// filter
+				res := filter.Filter()
+
+				// result
+				Convey("filter should be same with the expected", func() {
+					So(res, ShouldEqual, expectedFilter)
+				})
 			})
 		})
 	})

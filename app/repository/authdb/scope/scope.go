@@ -12,6 +12,7 @@ type IScopeRepository interface {
 	DeleteScope(ctx context.Context, filter interface{}) error
 	UpdateScope(ctx context.Context, in, filter interface{}) error
 	ListScope(ctx context.Context, filter interface{}) (interface{}, error)
+	CountScope(ctx context.Context, filter interface{}) (interface{}, error)
 }
 
 type RepositoryScope struct {

@@ -20,7 +20,7 @@ func (r *RepositoryScope) ListScope(ctx context.Context, filter interface{}) (in
 	}
 
 	// get scopes
-	cur, err := r.col.Find(ctx, f.Filter())
+	cur, err := r.col.Find(ctx, f.Filter(), f.Pagination.Option(), f.Sort.Option())
 
 	if err != nil {
 		return nil, tracing.LogError(sp, codes.Wrap(err, 501))

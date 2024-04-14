@@ -40,10 +40,16 @@ func (*ManageSentry) ManageParentName(s string) string {
 
 func (*ManageSentry) ManageParentOperation(s string) string {
 	// github.com/evenyosua18/auth2/app/infrastructure/server/grpc/middleware.OauthClientValidation.func1 : OauthClientValidation
+	//temp := strings.Split(s, ".")
+	//
+	//if len(temp) > 1 {
+	//	return temp[len(temp)-2]
+	//}
+
 	temp := strings.Split(s, ".")
 
-	if len(temp) > 1 {
-		return temp[len(temp)-2]
+	if len(temp) != 0 {
+		return temp[len(temp)-1]
 	}
 
 	return s

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = ".;pb";
+
+message EndpointData {
+  string Id = 1;
+  string Service = 2;
+  bool IsGenerate = 3;
+  bool StillExist = 4;
+  string CreatedAt = 5;
+  string UpdatedAt = 6;
+}

@@ -19,10 +19,12 @@ func (r *RepositoryScope) GetScope(ctx context.Context, filter interface{}) (int
 		return nil, tracing.LogError(sp, codes.Wrap(err, 502))
 	}
 
+	tracing.LogObject(sp, "decode filter", f.Filter())
+
 	// get scope
 	var scope model.ScopeModel
-	if res := r.col.FindOne(ctx, f.Filter()); res.Err() != nil {
-		return nil, tracing.LogError(sp, codes.Wrap(res.Err(), 501))
+	if err := r.col.FindOne(ctx, f.Filter()).Decode(&scope); err != nil {
+		return nil, tracing.LogError(sp, codes.Wrap(err, 501))
 	} else {
 		tracing.LogResponse(sp, scope)
 		return scope, nil

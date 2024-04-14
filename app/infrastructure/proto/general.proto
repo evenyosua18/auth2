@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = ".;pb";
+
+message Pagination {
+  int64 PageSize = 1;
+  int64 CurrentPage = 2;
+  int64 TotalPage = 3;
+  int64 TotalRecords = 4;
+}
+
+message PaginationRequest {
+  int64 PageSize = 1;
+  int64 CurrentPage = 2;
+}
+
+message Sort {
+  string Field = 1;
+  string Mode = 2;
+}
+
+message SortRequest {
+  string SortList = 1;
+}

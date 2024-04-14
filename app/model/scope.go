@@ -8,10 +8,11 @@ import (
 
 type (
 	ScopeModel struct {
-		Id        primitive.ObjectID   `bson:"_id"`
-		Service   string               `bson:"service"`
-		Name      string               `json:"name"`
-		Endpoints []primitive.ObjectID `json:"endpoints"`
+		Id           primitive.ObjectID   `bson:"_id"`
+		Service      string               `bson:"service"`
+		Name         string               `json:"name"`
+		Endpoints    []primitive.ObjectID `json:"endpoints"`
+		ListEndpoint []EndpointModel      `json:"list_endpoint"`
 
 		CreatedAt time.Time  `bson:"created_at"`
 		UpdatedAt time.Time  `bson:"updated_at"`
@@ -19,10 +20,12 @@ type (
 	}
 
 	ScopeFilter struct {
-		Id        *primitive.ObjectID
-		Service   string
-		Name      string
-		Endpoints []primitive.ObjectID
+		Pagination Pagination
+		Sort       Sort
+		Id         string
+		Service    string
+		Name       string
+		Endpoints  []string
 
 		Deleted bool
 	}
@@ -48,8 +51,10 @@ func (f ScopeFilter) Filter() bson.M {
 	}
 
 	// id
-	if f.Id != nil && !f.Id.IsZero() {
-		filter["_id"] = f.Id
+	if f.Id != "" {
+		if id, err := primitive.ObjectIDFromHex(f.Id); err == nil {
+			filter["_id"] = id
+		}
 	}
 
 	// name
@@ -64,7 +69,17 @@ func (f ScopeFilter) Filter() bson.M {
 
 	// TODO make sure again it works
 	if len(f.Endpoints) != 0 {
-		filter["endpoints"] = bson.M{"$in": f.Endpoints}
+		// convert to object id
+		var endpoints []primitive.ObjectID
+		for _, endpoint := range f.Endpoints {
+			if id, err := primitive.ObjectIDFromHex(endpoint); err == nil {
+				endpoints = append(endpoints, id)
+			}
+		}
+
+		if len(endpoints) != 0 {
+			filter["endpoints"] = bson.M{"$in": endpoints}
+		}
 	}
 
 	return filter
@@ -86,7 +101,8 @@ func (m ScopeModel) Update() bson.M {
 		updated["service"] = m.Service
 	}
 
-	// TODO add & delete endpoint
+	// always override endpoints
+	updated["endpoints"] = m.Endpoints
 
 	return bson.M{
 		"$set": updated,

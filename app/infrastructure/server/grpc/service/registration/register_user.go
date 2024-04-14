@@ -14,7 +14,7 @@ func (s *ServiceRegistration) RegisterUser(ctx context.Context, in *pb.Registrat
 	sp := tracing.StartParent(grpchelper.SetTransactionName(ctx, "RegisterUser"))
 	defer tracing.Close(sp)
 
-	//call interaction
+	// registration user
 	res, err := s.uc.RegistrationUser(tracing.Context(sp), in)
 	if err != nil {
 		return nil, tracing.LogError(sp, status.Error(response.Error(sp, err)))

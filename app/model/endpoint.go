@@ -25,6 +25,7 @@ type (
 		Endpoint   string
 		IsGenerate *bool
 		StillExist *bool
+		ListID     []primitive.ObjectID
 
 		Deleted bool
 	}
@@ -52,6 +53,10 @@ func (f EndpointFilter) Filter() bson.M {
 	// id
 	if f.Id != nil {
 		filter["_id"] = f.Id
+	} else if len(f.ListID) != 0 {
+		filter["_id"] = bson.M{
+			"$in": f.ListID,
+		}
 	}
 
 	// service

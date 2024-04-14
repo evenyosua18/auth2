@@ -6,6 +6,7 @@ import (
 	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/builder"
 	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/service/accesstoken"
 	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/service/registration"
+	"github.com/evenyosua18/auth2/app/infrastructure/server/grpc/service/scope"
 	"github.com/evenyosua18/auth2/app/repository"
 	"google.golang.org/grpc"
 )
@@ -14,5 +15,5 @@ import (
 func Apply(server *grpc.Server) {
 	pb.RegisterAccessTokenServiceServer(server, accesstoken.NewAccessTokenService(builder.NewAccessTokenBuilder(), container.InitializeAccessTokenUsecase(repository.Con.MainMongoDB)))
 	pb.RegisterRegistrationServiceServer(server, registration.NewRegistrationService(builder.NewRegistrationBuilder(), container.InitializeRegistrationUserUsecase(repository.Con.MainMongoDB)))
-	//pb.RegisterUserServiceServer(server, user.NewUserService(container.InitializeUserInteraction()))
+	pb.RegisterScopeServiceServer(server, scope.NewScopeService(builder.NewScopeBuilder(), container.InitializeScopeUsecase(repository.Con.MainMongoDB)))
 }

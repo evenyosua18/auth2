@@ -60,9 +60,14 @@ message UpdateScopeRequest {
   repeated string Endpoints = 4;
 }
 
+message DeleteScopeRequest {
+  string Id = 1;
+}
+
 service ScopeService {
   rpc GetScope(GetScopeRequest) returns (GetScopeResponse);
   rpc CreateScope(CreateScopeRequest) returns (google.protobuf.Empty);
   rpc GetScopes(GetScopesRequest) returns (GetScopesResponse);
   rpc UpdateScope(UpdateScopeRequest) returns (google.protobuf.Empty);
+  rpc DeleteScope(DeleteScopeRequest) returns (google.protobuf.Empty);
 }

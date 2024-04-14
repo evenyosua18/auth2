@@ -32,3 +32,8 @@ seed:
 wire:
 	@echo "-- generate dependency injection --"
 	@wire ./app/infrastructure/container/
+
+test-model:
+	@go test -v ./app/model
+
+test:
